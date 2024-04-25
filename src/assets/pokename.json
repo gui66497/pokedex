@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Bulbasaur",
+    "nameCn": "妙蛙种子"
+  },
+  {
+    "id": 2,
+    "name": "Ivysaur",
+    "nameCn": "妙蛙草"
+  },
+  {
+    "id": 3,
+    "name": "Venusaur",
+    "nameCn": "妙蛙花"
+  }
+]
