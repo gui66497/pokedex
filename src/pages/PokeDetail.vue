@@ -56,13 +56,25 @@
       <div class="col" >
         <!--进化链-->
         <div v-if="evolutionChain" class="q-pa-lg">
+          <h2 class="title">进化链</h2>
           <vue3-tree-org
             :data="treeData"
             :horizontal="true"
             :node-draggable="true"
             :scalable="false"
+            :toolBar="false"
+            :disabled="true"
             :default-expand-level="1"
+            @on-node-click="onNodeClick"
           >
+            <!-- 自定义节点内容 -->
+            <template v-slot="{node}">
+              <div class="tree-org-node__text node-label">
+                <img style="width: 60px" :src="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/'+node.id+'.png'" alt="Node image" />
+                <div class="custom-content"></div>
+                <div class="custom-label">{{node.label}}</div>
+              </div>
+            </template>
           </vue3-tree-org>
 
         </div>
@@ -76,10 +88,11 @@
 </template>
 
 <script setup>
-import {ref, onMounted, onBeforeMount } from "vue";
+import {ref, onMounted, watch, onBeforeMount } from "vue";
 import { api } from 'boot/axios'
 import { useQuasar } from 'quasar'
 import {reactive, toRefs, provide} from "vue";
+import pokename from "../assets/allPokemon.json"
 
 // 引入 echarts 核心模块，核心模块提供了 echarts 使用必须要的接口
 import * as echarts from 'echarts/core';
@@ -136,6 +149,11 @@ onMounted(() => {
   //initChart();
 });
 
+//监听路由变化
+watch(() => route.query.name, (newName) => {
+  inputName.value = newName;
+  getDetail(newName);
+});
 /**
  * 初始化种族值图表
  * @param statsArr 种族值数组
@@ -245,6 +263,7 @@ async function getDetail(name) {
             { name: 'calories',  field: 'calories', align: 'left' },
           ]
 
+          statsArr.value = [];
           //种族值
           for (const stat of data.stats) {
             statsArr.value.push(stat.base_stat);
@@ -260,7 +279,7 @@ async function getDetail(name) {
               console.log("evolutionChain:", evolutionChain.value);
               let tree = [evolutionChain.value]
               const actual = treeMap(tree);
-              console.log("actual:", actual);
+              console.log("actual:", actual[0]);
               treeData.value = actual[0];
             });
 
@@ -275,11 +294,22 @@ async function getDetail(name) {
 
 //tree数据格式转换
 const treeMap = (inputTree) => inputTree.map(t => ({
-  label: t.species.name,
-  key: t.species.name,
+  label: pokename.find(p => p.nameEn.toLowerCase() === t.species.name.toLowerCase()).nameZh,
+  id: pokename.find(p => p.nameEn.toLowerCase() === t.species.name.toLowerCase()).index,
   children: treeMap(t.evolves_to)
 }));
 
+const router = useRouter();
+
+/**
+ * 点击节点
+ * @param node
+ */
+function onNodeClick(e, data) {
+  const nameEn = pokename.find(p => p.index === data.id).nameEn;
+  console.log("nameEn", nameEn.toLowerCase());
+  router.push({path: '/detail', query: {name: nameEn.toLowerCase()}});
+}
 /**
  * 语音讲解
  * 有兼容性问题 部分手机浏览器打不开
@@ -305,6 +335,7 @@ defineExpose({
 <style lang="scss" scoped>
 .zm-tree-org {
   height: 300px;
+  padding: 0;
 }
 .tree-org-node__text {
   text-align: left;
@@ -314,6 +345,13 @@ defineExpose({
     margin-bottom: 8px;
     border-bottom: 1px solid currentColor;
   }
+  .custom-label {
+    text-align: center;
+  }
+}
+.title {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
 
