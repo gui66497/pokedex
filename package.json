@@ -10,7 +10,8 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
-    "build": "quasar build"
+    "build": "quasar build",
+    "boot": "quasar new boot vue3TreeOrg"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
@@ -21,7 +22,8 @@
     "echarts": "^5.5.0",
     "quasar": "^2.8.0",
     "vue": "^3.4.18",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vue3-tree-org": "^4.2.2"
   },
   "devDependencies": {
     "@quasar/app-vite": "^1.8.0",

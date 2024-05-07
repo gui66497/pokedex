@@ -46,7 +46,24 @@
 
         <div v-show="pokemon" class="q-pa-lg">
 
+          <!--种族值 图表-->
           <div id="main" style="height: 300px;"></div>
+
+        </div>
+
+      </div>
+
+      <div class="col" >
+        <!--进化链-->
+        <div v-if="evolutionChain" class="q-pa-lg">
+          <vue3-tree-org
+            :data="treeData"
+            :horizontal="true"
+            :node-draggable="true"
+            :scalable="false"
+            :default-expand-level="1"
+          >
+          </vue3-tree-org>
 
         </div>
 
@@ -104,6 +121,8 @@ const rows = ref();
 const columns = ref();
 const musicStr = ref()
 const statsArr = ref([])
+const evolutionChain = ref();
+const treeData = ref();
 
 const inputName = ref('');
 const name_zh = ref('');
@@ -233,6 +252,18 @@ async function getDetail(name) {
           //初始化图表
           initChart(statsArr.value);
 
+          //进化链
+          console.log("evolution_chain:", data.evolution_chain);
+          api.get(data.evolution_chain.url)
+            .then((evolutionData) => {
+              evolutionChain.value = evolutionData.data.chain;
+              console.log("evolutionChain:", evolutionChain.value);
+              let tree = [evolutionChain.value]
+              const actual = treeMap(tree);
+              console.log("actual:", actual);
+              treeData.value = actual[0];
+            });
+
         });
 
     })
@@ -241,6 +272,13 @@ async function getDetail(name) {
     });
 
 }
+
+//tree数据格式转换
+const treeMap = (inputTree) => inputTree.map(t => ({
+  label: t.species.name,
+  key: t.species.name,
+  children: treeMap(t.evolves_to)
+}));
 
 /**
  * 语音讲解
@@ -264,5 +302,18 @@ defineExpose({
 
 
 </script>
-
+<style lang="scss" scoped>
+.zm-tree-org {
+  height: 300px;
+}
+.tree-org-node__text {
+  text-align: left;
+  font-size: 14px;
+  .custom-content {
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid currentColor;
+  }
+}
+</style>
 
