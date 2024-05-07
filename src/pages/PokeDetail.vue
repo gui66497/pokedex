@@ -272,11 +272,11 @@ async function getDetail(name) {
           initChart(statsArr.value);
 
           //进化链
-          console.log("evolution_chain:", data.evolution_chain);
+          console.log("evolution_chain url:", data.evolution_chain.url);
           api.get(data.evolution_chain.url)
             .then((evolutionData) => {
+              console.log("evolutionChain:", evolutionData);
               evolutionChain.value = evolutionData.data.chain;
-              console.log("evolutionChain:", evolutionChain.value);
               let tree = [evolutionChain.value]
               const actual = treeMap(tree);
               console.log("actual:", actual[0]);
