@@ -75,6 +75,12 @@
 
     <div id="name" style="height: 200px"></div>
 
+    <div class="footer-menu">
+      <q-btn label="图鉴" @click="navigateTo('tujian')" />
+      <q-btn label="拍照" @click="navigateTo('scan')" />
+      <q-btn label="我的" @click="navigateTo('ve')" />
+    </div>
+
   </q-page>
 </template>
 
@@ -174,6 +180,7 @@ async function startCamera() {
     if (!videoElement.paused && !videoElement.ended) {
       canvas.width = videoElement.videoWidth;
       canvas.height = videoElement.videoHeight;
+      console.log("drawI..........................................")
       ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
 
       const imageData = ctx.getImageData(
@@ -233,6 +240,10 @@ function sortByProperty(property) {
   };
 }
 
+function navigateTo(page) {
+  router.push({ path: `/${page}` });
+}
+
 function talk2(str) {
   console.log("index talk!!")
 }
@@ -243,6 +254,15 @@ defineExpose({
 
 </script>
 <style>
+.footer-menu {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: #f8f8f8;
+  padding: 10px 0;
+}
 /*.bg-image {
   background-image: url(some-pokemon-wallpaper-i-did-recently-v0-mtawjm7a4kq81.webp);
   background-repeat: no-repeat;

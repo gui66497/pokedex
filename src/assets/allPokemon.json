@@ -1961,5 +1961,18 @@
     "abilityHide": "",
     "form": "",
     "generation": 1
-  }
+  },
+  {
+  "index": 172,
+  "nameZh": "皮丘",
+  "nameJa": "ピチュー",
+  "nameEn": "Pichu",
+  "type1": "电",
+  "type2": "",
+  "ability1": "静电",
+  "ability2": "",
+  "abilityHide": "避雷针",
+  "form": "",
+  "generation": 2
+}
 ]

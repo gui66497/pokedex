@@ -163,6 +163,7 @@ const leftDrawerOpen = ref(false)
 
 function toggleLeftDrawer () {
   iconType.value = "menu";
-  router.push({path: `/`});
+  router.back();
+  //router.push({path: `/`});
 }
 </script>
